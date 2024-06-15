@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: sans-serif;
+            color: black;
+            background-color: white;
+        }
+
+        body.dark {
+            color: white;
+            background-color: black;
+        }
+
+        h1 {
+            font-size: 4em;
+            color: black;
+        }
+
+        h1.dark {
+            color: white;
+        }
+
+        h2 {
+            font-size: 1.4em;
+            color: black;
+        }
+
+        h2.dark {
+            color: white;
+        }
+
+        textarea {
+            width: 50%;
+            height: 200px;
+            font-size: 1.5em;
+            color: black;
+            background-color: white;
+        }
+
+        textarea.dark {
+            color: white;
+            background-color: black;
+        }
+
+        .styledButton {
+            background-color: #e60b0b;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: none;
+            color: white;
+            padding: 12px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+            border-radius: 12px;
+        }
+
+        .styledButton:hover {
+            background-color: white;
+            color: black;
+        }
+
+        #toggleStatsButton {
+            top: 80px;
+        }
+
+        .spaced {
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="styledButton" id="darkModeButton">Toggle Dark Mode</button>
+    <button class="styledButton" id="toggleStatsButton">Toggle Stats</button>
+    <h2 id="practise_text" class="spaced">Practise reading ASCII</h2>
+    <h1 id="heading" class="spaced"></h1>
+    <form id="myForm" method="post" class="spaced">
+        <textarea id="myTextarea" name="text" placeholder="What is this ASCII character?"
+            style="width: 180%; height: 200%; position: relative; left: 50%; transform: translateX(-50%);"></textarea>
+    </form>
+    <p id="results"></p>
+    <script>
+        var correct = 0;
+        var incorrect = 0;
+        var alphabet = {
+            "01000001": "A",
+            "01000010": "B",
+            "01000011": "C",
+            "01000100": "D",
+            "01000101": "E",
+            "01000110": "F",
+            "01000111": "G",
+            "01001000": "H",
+            "01001001": "I",
+            "01001010": "J",
+            "01001011": "K",
+            "01001100": "L",
+            "01001101": "M",
+            "01001110": "N",
+            "01001111": "O",
+            "01010000": "P",
+            "01010001": "Q",
+            "01010010": "R",
+            "01010011": "S",
+            "01010100": "T",
+            "01010101": "U",
+            "01010110": "V",
+            "01010111": "W",
+            "01011000": "X",
+            "01011001": "Y",
+            "01011010": "Z",
+            "01100001": "a",
+            "01100010": "b",
+            "01100011": "c",
+            "01100100": "d",
+            "01100101": "e",
+            "01100110": "f",
+            "01100111": "g",
+            "01101000": "h",
+            "01101001": "i",
+            "01101010": "j",
+            "01101011": "k",
+            "01101100": "l",
+            "01101101": "m",
+            "01101110": "n",
+            "01101111": "o",
+            "01110000": "p",
+            "01110001": "q",
+            "01110010": "r",
+            "01110011": "s",
+            "01110100": "t",
+            "01110101": "u",
+            "01110110": "v",
+            "01110111": "w",
+            "01111000": "x",
+            "01111001": "y",
+            "01111010": "z",
+        };
+        var randomAscii = Object.keys(alphabet)[Math.floor(Math.random() * Object.keys(alphabet).length)];
+        var randomLetter = alphabet[randomAscii];
+        document.getElementById('heading').textContent = randomAscii;
+
+        document.getElementById('myTextarea').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                var userAnswer = e.target.value;
+                var heading = document.getElementById('heading');
+                if (userAnswer === randomLetter) {
+                    heading.style.color = 'green';
+                    heading.textContent = randomAscii + " = " + randomLetter;
+                    correct++;
+                } else {
+                    heading.style.color = 'red';
+                    heading.textContent = randomAscii + " = " + randomLetter + " (not " + userAnswer + ")";
+                    incorrect++;
+                }
+                // Clear the textarea and generate a new random letter
+                e.target.value = '';
+                randomAscii = Object.keys(alphabet)[Math.floor(Math.random() * Object.keys(alphabet).length)];
+                randomLetter = alphabet[randomAscii];
+                setTimeout(function () {
+                    var body = document.body;
+                    if (body.classList.contains('dark')) {
+                        heading.style.color = 'white';
+                    } else {
+                        heading.style.color = 'black';
+                    }
+                    heading.textContent = randomAscii;
+                }, 1500);
+
+                // add some text below showing num correct and num incorrect and percentage correct
+                var results = document.getElementById('results');
+                results.innerHTML = "Correct = " + correct + "<br>Incorrect = " + incorrect + "<br>Accuracy = " + Math.round((correct / (correct + incorrect)) * 100) + "%";
+            }
+        });
+
+        document.getElementById('darkModeButton').addEventListener('click', function () {
+            var body = document.body;
+            var textarea = document.getElementById('myTextarea');
+            var h1 = document.getElementById('heading');
+            var h2 = document.getElementById('practise_text');
+            body.classList.toggle('dark');
+            textarea.classList.toggle('dark');
+            h1.classList.toggle('dark');
+            // fix color not updating immediately
+            var heading = document.getElementById('heading');
+            if (body.classList.contains('dark')) {
+                heading.style.color = 'white';
+            } else {
+                heading.style.color = 'black';
+            }
+            h2.classList.toggle('dark');
+        });
+
+        document.getElementById('toggleStatsButton').addEventListener('click', function () {
+            var results = document.getElementById('results');
+            if (results.style.display === 'none') {
+                results.style.display = 'block';
+            } else {
+                results.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

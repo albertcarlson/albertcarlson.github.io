@@ -1,65 +1,37 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>COMING SOON</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <style>
-        body,
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: sans-serif;
+        }
         h1 {
-            font-family: "Raleway", sans-serif
+            font-size: 3em;
         }
-
-        body,
-        html {
-            height: 100%
+        ul {
+            list-style-type: none;
+            padding: 0;
         }
-
-        .bgimg {
-            background-image: url('/images/forestbridge.jpg');
-            min-height: 100%;
-            background-position: center;
-            background-size: cover;
+        a {
+            font-size: 1.5em;
+            color: black;
+            text-decoration: none;
+        }
+        a:hover {
+            color: blue;
         }
     </style>
 </head>
-
 <body>
-
-    <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
-        <div class="w3-display-topleft w3-padding-large w3-xlarge">
-            Albert Carlson
-        </div>
-        <div class="w3-display-middle">
-            <h1 class="w3-jumbo w3-animate-top">COMING SOON</h1>
-            <hr class="w3-border-grey" style="margin:auto;width:40%">
-            <p id="countdown" class="w3-large w3-center"></p>
-
-            <script>
-                // Get today's date
-                var now = new Date();
-
-                // Set the target date to July 1st, 2024
-                var targetDate = new Date('2024-07-25');
-
-                // Calculate the difference in milliseconds
-                var diff = targetDate - now;
-
-                // Convert the difference to days
-                var days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-
-                // Get the paragraph element
-                var countdownElement = document.getElementById('countdown');
-
-                // Update the text content of the paragraph
-                countdownElement.textContent = days + ' days left';
-            </script>
-        </div>
-    </div>
-
+    <h1>Table of Contents</h1>
+    <ul>
+        <li><a href="pages/ascii.html">ASCII Practice</a></li>
+        <!-- Add more list items with links as needed -->
+    </ul>
 </body>
-
 </html>
