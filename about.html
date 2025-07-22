@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Blog — About Me</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script>
+    (function() {
+      const t = localStorage.getItem('theme');
+      if (t==='dark' || (!t && window.matchMedia('(prefers-color-scheme:dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+  <script defer src="theme.js"></script>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Me</a>
+      <a href="minigames.html">Minigames</a>
+    </nav>
+
+    <header>
+      <h1>About Me</h1>
+    </header>
+    <p>
+    I write about programming and mathematics. 
+    However, you'll also find essays on a variety of other topics that catch my interest, 
+    since I enjoy exploring different subjects and sharing my thoughts. Inspired by a 
+    favorite quote from Naval Ravikant, I embrace this broad approach to my writing:
+    <blockquote>
+        Specialisation is for insects. I don't believe in this model of trying to focus your life down one thing. You've got one life just do everything you want.
+        <cite>- Naval Ravikant</cite>
+    </blockquote>
+    I guess that this to some extent also gives a more authentic view of my personality. 
+    To help you navigate, I've labeled these diverse posts as “Rant”s. Feel free to skip 
+    them if they aren't your cup of tea.
+    Also, this entire blog is an experiment to improve my writing, giving me accountability
+    by publishing it publicly. I live by <a href="http://sl4.org/crocker.html">Crocker's Rules</a>,
+    so feel free to roast me. (If you want to do so anonymously, you can do that
+    <a href="https://www.admonymous.co/albertcarlson">here</a>. Leave a google forms or
+    similar if you want me to respond.) My blog is boring if I never regret a blog post.
+    
+    Also, just feel free to reach out either way. I made this blog to connect with like-minded individuals.
+    </p>
+
+    <footer>
+      <div class="social-icons">
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="LinkedIn">💼</a>
+        <a href="#" aria-label="GitHub">🐙</a>
+      </div>
+      <p>&copy; 2025 Albert Carlson</p>
+    </footer>
+  </div>
+</body>
+</html>

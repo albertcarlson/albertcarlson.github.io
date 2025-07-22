@@ -1,0 +1,145 @@
+/* styles.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+nav {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+nav a {
+  margin: 0 1.5rem;
+  color: #f00;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color .2s;
+}
+
+nav a:hover {
+  color: #fff;
+}
+
+h1, h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin-bottom: 1.5rem;
+}
+
+.quotes blockquote {
+  border-left: 4px solid #f00;
+  padding-left: 1.2rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: #ccc;
+}
+
+.quotes cite {
+  display: block;
+  text-align: right;
+  margin-top: .5rem;
+  font-size: 1.4rem;
+  color: #999;
+}
+
+footer {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.social-icons {
+  margin: 1.5rem 0;
+}
+
+.social-icons a {
+  margin: 0 1rem;
+  font-size: 2rem;
+  color: #f00;
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.social-icons a:hover {
+  color: #fff;
+}
+
+:root {
+  /* light mode colors */
+  --bg: #fff;
+  --fg: #000;
+  --accent: #f00;
+  --quote-border: #f00;
+  --quote-text: #333;
+}
+
+html.dark {
+  /* dark mode overrides */
+  --bg: #000;
+  --fg: #fff;
+  --accent: #f00;
+  --quote-border: #f00;
+  --quote-text: #ccc;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* nav links, h1/h2, quotes, etc… */
+nav a {
+  color: var(--accent);
+}
+nav a:hover {
+  color: var(--fg);
+}
+h1, h2 {
+  color: var(--fg);
+}
+.quotes blockquote {
+  border-left-color: var(--quote-border);
+  color: var(--quote-text);
+}
+footer .social-icons a {
+  color: var(--accent);
+}
+footer .social-icons a:hover {
+  color: var(--fg);
+}
+
+/* Toggle button (inserted by JS) */
+#theme-toggle {
+  font-size: 1.4rem;
+  background: none;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 0.3em 0.8em;
+  cursor: pointer;
+  margin-left: 1rem;
+  transition: color .2s, border-color .2s;
+}
+
+#theme-toggle:hover {
+  color: var(--fg);
+  border-color: var(--fg);
+}
