@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Albert Carlson</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="theme.js"></script>
+  <title>POST TITLE — Albert Carlson</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../theme.js"></script>
 </head>
 <body>
 
 <nav>
-  <a class="nav-logo" href="index.html">Albert<span>Carlson</span></a>
+  <a class="nav-logo" href="../index.html">Albert<span>Carlson</span></a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active">Posts</a></li>
-    <li><a href="minigames.html">Minigames</a></li>
-    <li><a href="about.html">About</a></li>
+    <li><a href="../index.html" class="active">Posts</a></li>
+    <li><a href="../minigames.html">Minigames</a></li>
+    <li><a href="../about.html">About</a></li>
   </ul>
   <div class="nav-social">
     <button id="theme-toggle" aria-label="Toggle dark mode"></button>
@@ -28,20 +28,34 @@
 </nav>
 
 <main>
-  <header class="page-header">
-    <h1>Posts</h1>
-    <p>Writing on software, math, and whatever else is interesting.</p>
-  </header>
+  <a class="back-link" href="../index.html">&#8592; All posts</a>
 
-  <ul class="post-list" id="post-list">
-    <!-- Populated by posts.js -->
-  </ul>
+  <article>
+    <header class="article-header">
+      <div class="post-meta">
+        <span>MONTH DD, YYYY</span>
+        <span class="post-tag">TAG</span>  <!-- delete if no tag -->
+      </div>
+      <h1>Post Title</h1>
+    </header>
+
+    <div class="article-body">
+      <p>Write your post content here.</p>
+
+      <h2>A Section</h2>
+      <p>Section body text.</p>
+
+      <pre><code>// Code example
+const hello = "world";</code></pre>
+
+      <blockquote>A notable quote or callout.</blockquote>
+    </div>
+  </article>
 </main>
 
 <footer>
   &copy; <script>document.write(new Date().getFullYear())</script> Albert Carlson
 </footer>
 
-<script src="posts.js"></script>
 </body>
 </html>
