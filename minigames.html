@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Albert Carlson</title>
+  <title>Minigames — Albert Carlson</title>
   <link rel="stylesheet" href="styles.css">
   <script src="theme.js"></script>
 </head>
@@ -12,8 +12,8 @@
 <nav>
   <a class="nav-logo" href="index.html">Albert<span>Carlson</span></a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active">Posts</a></li>
-    <li><a href="minigames.html">Minigames</a></li>
+    <li><a href="index.html">Posts</a></li>
+    <li><a href="minigames.html" class="active">Minigames</a></li>
     <li><a href="about.html">About</a></li>
   </ul>
   <div class="nav-social">
@@ -29,19 +29,25 @@
 
 <main>
   <header class="page-header">
-    <h1>Posts</h1>
-    <p>Writing on software, math, and whatever else is interesting.</p>
+    <h1>Minigames</h1>
+    <p>Small interactive projects built for fun.</p>
   </header>
 
-  <ul class="post-list" id="post-list">
-    <!-- Populated by posts.js -->
-  </ul>
+  <div class="game-grid">
+    <!-- Add game cards here -->
+    <!-- Example:
+    <a class="game-card" href="/games/ascii/">
+      <h3>ASCII Practiser</h3>
+      <p>Practice reading and typing ASCII characters.</p>
+    </a>
+    -->
+    <p style="color:var(--gray-text);font-size:0.9rem">More coming soon.</p>
+  </div>
 </main>
 
 <footer>
   &copy; <script>document.write(new Date().getFullYear())</script> Albert Carlson
 </footer>
 
-<script src="posts.js"></script>
 </body>
 </html>
