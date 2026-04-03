@@ -134,6 +134,15 @@ main {
   padding: 3rem 1.5rem;
 }
 
+/* ===== BLOCKQUOTE (global) ===== */
+blockquote {
+  border-left: 3px solid var(--blue);
+  padding-left: 1rem;
+  color: var(--gray-text);
+  margin: 1rem 0;
+  font-style: italic;
+}
+
 /* ===== PAGE HEADER ===== */
 .page-header {
   margin-bottom: 2.5rem;
