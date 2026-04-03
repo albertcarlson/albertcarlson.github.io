@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turbo in the Monsterfield</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            height: 100%;
+        }
+        .grid {
+            display: grid;
+            gap: 5px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #000;
+            font-size: 24px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: transparent;
+        }
+        .player {
+            background-image: url('img/turbo.png');
+        }
+        .goal {
+            background-image: url('img/finish.png');
+        }
+        .trap {
+            background-color: rgb(255, 163, 163);
+        }
+        .encountered-trap {
+            background-color: red;
+            background-image: url('img/monster.png');
+        }
+        .safe-cell {
+            background-color: rgb(180, 255, 176);
+        }
+        form {
+            display: block;
+            gap: 10px;
+            align-items: center;
+        }
+        label, .radio-group, .radio-group2, input[type="number"], button {
+            display: block;
+            font-size: 16px;
+        }
+        input[type="number"] {
+            width: 50px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #lives {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        #rules {
+            display: none;
+            margin-top: 10px;
+            font-size: 16px;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="gridForm">
+            <label for="cols"><strong>Columns</strong></label>
+            <input type="number" id="cols" name="cols" min="1" max="50" value="7">
+            <br>
+            <label for="coloring"><strong>Coloring</strong></label>
+            <div class="radio-group">
+                <label for="noColoring">
+                    <input type="radio" id="noColoring" name="coloring" value="noColoring">
+                    No coloring
+                </label>
+                <label for="traps">
+                    <input type="radio" id="traps" name="coloring" value="traps" checked>
+                    Traps
+                </label>
+                <label for="trapsAndSafes">
+                    <input type="radio" id="trapsAndSafes" name="coloring" value="trapsAndSafes">
+                    Traps and safe tiles
+                </label>
+                <!-- <label for="dev">
+                    <input type="radio" id="dev" name="coloring" value="dev">
+                    <em>(Developer)</em>
+                </label> -->
+            </div>
+            <br>
+            <label for="trapPlacements"><strong>Trap placements</strong></label>
+            <div class="radio-group2">
+                <label for="normal">
+                    <input type="radio" id="normal" name="trapPlacements" value="normal" checked>
+                    Normal
+                </label>
+                <!-- <label for="mixed">
+                    <input type="radio" id="mixed" name="trapPlacements" value="mixed">
+                    Mixed
+                </label> -->
+                <label for="sneaky">
+                    <input type="radio" id="sneaky" name="trapPlacements" value="sneaky">
+                    Sneaky
+                </label>
+            </div>
+            <br>
+            <button type="submit">Create Grid</button>
+        </form>
+        <div class="grid" id="grid"></div>
+        <div id="lives">Lives: ❤️ ❤️ ❤️</div>
+        <button id="toggleRulesButton">Show Instructions</button>
+        <div id="rules">
+            <p>Turbo needs your help to get safely to the finish flag!</p>
+            <p>However, there are hidden monsters in the minefield that want to eat Turbo!<br>If you encounter a monster, you lose a life.</p>
+            <p>There is <strong> exactly one monster</strong> in each row, <strong>except</strong> the top and bottom rows, which are safe.</p>
+            <p>There is <strong>at most</strong> one monster in each column.</p>
+            <p>Good luck!</p>
+            <p>Oh, and something you can ponder on: How many lives does Turbo need to be <em>guaranteed</em><br> to make it across when there are <em>N</em> columns? Maybe 3 lives is not always enough?</p>
+        </div>
+    </div>
+    <script>
+        let grid = [];
+        let playerPosition = { x: 0, y: 0 };
+        let trapPositions = [];
+        let encounteredTraps = [];
+        let safePositions = [];
+        let coloring = "noColoring";
+        let trapPlacements = "normal";
+        let lives = 3;
+        let rows = 8;
+        let cols = 7;
+        let goalPosition = { x: cols-1, y: rows-1 };
+
+        document.getElementById('gridForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            cols = parseInt(document.getElementById('cols').value);
+            rows = cols + 1;
+            const container = document.querySelector('.container');
+            if (cols > 20) {
+                container.style.alignItems = "flex-start";
+            } else {
+                container.style.alignItems = "center";
+            }
+            coloring = document.querySelector('input[name="coloring"]:checked').value;
+            trapPlacements = document.querySelector('input[name="trapPlacements"]:checked').value;
+            resetGame();
+        });
+
+        function createGrid() {
+            grid = Array.from({ length: rows }, () => Array(cols).fill(' '));
+            playerPosition = { x: 0, y: 0 };
+            goalPosition = { x: cols-1, y: rows-1 };
+            trapPositions = placeTraps();
+            encounteredTraps = [];
+            safePositions = [];
+            grid[playerPosition.y][playerPosition.x] = 'O';
+        }
+
+        function renderGrid() {
+            const gridElement = document.getElementById('grid');
+            gridElement.style.gridTemplateColumns = `repeat(${cols}, 50px)`;
+            gridElement.style.gridTemplateRows = `repeat(${rows}, 50px)`;
+            gridElement.innerHTML = '';
+            grid.forEach((row, rowIndex) => {
+                row.forEach((cell, colIndex) => {
+                    const cellElement = document.createElement('div');
+                    cellElement.className = 'cell';
+                    if (rowIndex === playerPosition.y && colIndex === playerPosition.x) {
+                        cellElement.classList.add('player');
+                    }
+                    if (rowIndex === goalPosition.y && colIndex === goalPosition.x) {
+                        cellElement.classList.add('goal');
+                    }
+                    if (trapPositions.some(pos => pos.x === colIndex && pos.y === rowIndex)) {
+                        if (encounteredTraps.some(pos => pos.x === colIndex && pos.y === rowIndex)) {
+                            if (coloring === "traps" || coloring === "trapsAndSafes" || coloring === "dev") {
+                                cellElement.classList.add('encountered-trap');
+                            }
+                        } else if (coloring === "dev") {
+                            cellElement.classList.add('trap');
+                        }
+                    } else if (coloring === "trapsAndSafes" || coloring === "dev") {
+                        if (rowIndex === 0 || rowIndex === rows - 1 || safePositions.some(pos => pos.x === colIndex && pos.y === rowIndex)) {
+                            cellElement.classList.add('safe-cell');
+                        }
+                    }
+                    gridElement.appendChild(cellElement);
+                });
+            });
+            document.getElementById('lives').textContent = `Lives: ${'❤️ '.repeat(lives).trim()}`;
+        }
+
+        function placeTraps() {
+            // place one trap in each row, and at most one in each column
+            const traps = [];
+            switch (trapPlacements) {
+                case "normal":
+                    // Completely uniformly at random from the allowed positions
+
+                    // Pick a uniformly random permutation of {0, 1, ..., cols-1} using Fisher-Yates algorithm
+                    let permutation = Array.from({ length: cols }, (_, i) => i);
+                    for (let i = cols - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [permutation[i], permutation[j]] = [permutation[j], permutation[i]];
+                    }
+                    // Transform this permutation of {1, 2, ..., cols} to trap positions
+                    // (permutation[1], 1), (permutation[2], 2), ..., (permutation[cols-1], cols-1)
+                    // note that permutation[0] is not used, this is the safe column.
+                    for (let i = 1; i < cols; i++) {
+                        traps.push({ x: permutation[i], y: i });
+                    }
+                    return traps;
+                
+                case "sneaky":
+                    // Diagonal with one 'hole' in the middle
+                    let hole_col = Math.floor(Math.random() * cols);
+                    let ascending = Math.random() < 0.5;
+                    for (let i = 0; i < cols; i++) {
+                        switch (ascending) {
+                            case true:
+                                if (i < hole_col) {
+                                    traps.push({ x: cols-i-1, y: i+1 });
+                                } else if (i > hole_col) {
+                                    traps.push({ x: cols-i-1, y: i });
+                                }
+                                break;
+                            case false:
+                                if (i < hole_col) {
+                                    traps.push({ x: i, y: i+1 });
+                                } else if (i > hole_col) {
+                                    traps.push({ x: i, y: i });
+                                }
+                                break;
+                        }
+                    }
+                    return traps;
+                
+                // case "mixed":
+                //     // Somewhere in-between the two above, where the position
+                //     // is biased towards a lot of "mini diagonal" patterns
+                //     for (let i = 0; i < cols; i++) {
+                //         if (Math.random() < 0.5) {
+                //             traps.push({ x: i, y: i });
+                //         } else {
+                //             traps.push({ x: cols-i-1, y: i });
+                //         }
+                //     }
+                //     return traps;
+            }
+        }
+
+        function resetGame() {
+            lives = 3;
+            createGrid();
+            renderGrid();
+        }
+
+        function resetPlayerPosition() {
+            playerPosition = { x: 0, y: 0 };
+            grid[playerPosition.y][playerPosition.x] = 'O';
+            renderGrid();
+        }
+
+        function movePlayer(direction) {
+            grid[playerPosition.y][playerPosition.x] = ' ';
+            if (direction === 'W' && playerPosition.y > 0) playerPosition.y--;
+            if (direction === 'A' && playerPosition.x > 0) playerPosition.x--;
+            if (direction === 'S' && playerPosition.y < rows - 1) playerPosition.y++;
+            if (direction === 'D' && playerPosition.x < cols - 1) playerPosition.x++;
+            
+            if (playerPosition.x === goalPosition.x && playerPosition.y === goalPosition.y) {
+                alert("Congratulations! You successfully helped Turbo avoid the monsters and get safely to the finish flag!");
+                resetGame();
+                return;
+            }
+
+            if (trapPositions.some(pos => pos.x === playerPosition.x && pos.y === playerPosition.y)) {
+                if (!encounteredTraps.some(pos => pos.x === playerPosition.x && pos.y === playerPosition.y)) {
+                    encounteredTraps.push({ x: playerPosition.x, y: playerPosition.y });
+                    // mark all cells in the same row and column as safe
+                    for (let i = 0; i < cols; i++) {
+                        if (i !== playerPosition.x) {
+                            grid[playerPosition.y][i] = 'O';
+                            safePositions.push({ x: i, y: playerPosition.y });
+                        }
+                        if (i !== playerPosition.y) {
+                            grid[i][playerPosition.x] = 'O';
+                            safePositions.push({ x: playerPosition.x, y: i });
+                        }
+                    }
+                    lives--;  // be nice and only lose one life per trap
+                }
+                if (lives > 0) {
+                    // alert(`You hit a trap! You have ${lives} lives left.`);
+                    resetPlayerPosition();
+                } else {
+                    renderGrid();  // display the last trap
+                    setTimeout(() => {
+                        alert("Game Over");
+                        resetGame();
+                    }, 1);  // delay the alert to ensure renderGrid completes
+                }
+            } else {
+                grid[playerPosition.y][playerPosition.x] = 'O';
+                safePositions.push({ x: playerPosition.x, y: playerPosition.y });
+                renderGrid();
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            const key = event.key.toUpperCase();
+            if (['W', 'A', 'S', 'D'].includes(key)) {
+                movePlayer(key);
+            } else if (['ARROWUP', 'ARROWLEFT', 'ARROWDOWN', 'ARROWRIGHT'].includes(event.key.toUpperCase())) {
+                switch (event.key.toUpperCase()) {
+                    case 'ARROWUP':
+                        movePlayer('W');
+                        break;
+                    case 'ARROWLEFT':
+                        movePlayer('A');
+                        break;
+                    case 'ARROWDOWN':
+                        movePlayer('S');
+                        break;
+                    case 'ARROWRIGHT':
+                        movePlayer('D');
+                        break;
+                }
+            }
+        });
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', (event) => {
+            touchStartX = event.changedTouches[0].screenX;
+            touchStartY = event.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', (event) => {
+            touchEndX = event.changedTouches[0].screenX;
+            touchEndY = event.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > 0) {
+                    movePlayer('D'); // Swipe right
+                } else {
+                    movePlayer('A'); // Swipe left
+                }
+            } else {
+                if (deltaY > 0) {
+                    movePlayer('S'); // Swipe down
+                } else {
+                    movePlayer('W'); // Swipe up
+                }
+            }
+        }
+
+        document.getElementById('toggleRulesButton').addEventListener('click', function() {
+            const rules = document.getElementById('rules');
+            if (rules.style.display === 'none' || rules.style.display === '') {
+                rules.style.display = 'block';
+                this.textContent = 'Hide Instructions';
+            } else {
+                rules.style.display = 'none';
+                this.textContent = 'Show Instructions';
+            }
+        });
+
+        resetGame();
+    </script>
+</body>
+</html>
