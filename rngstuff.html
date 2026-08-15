@@ -50,7 +50,6 @@
     <script>
         /**
          * Helper function to pick a choice based on relative weights.
-         * For example, weights [14, 5, 4, 5, 14] will be evaluated out of 42.
          */
         function weightedRandom(choices, weights) {
             const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
@@ -84,17 +83,20 @@
 
             // If input is 5, begin the algorithm steps
             let log = [];
+            let drawnNumbers = []; // Keep track of numbers as they are picked
 
             // --- STEP A ---
             // Probabilities: 14/42, 5/42, 4/42, 5/42, 14/42
             const num1 = weightedRandom([1, 2, 3, 4, 5], [14, 5, 4, 5, 14]);
             log.push(`<strong>STEP A:</strong> Picked number <strong>${num1}</strong>`);
+            drawnNumbers.push(num1);
 
             // Reusable Step C function
             const doStepC = () => {
                 // Probabilities: 2/5, 1/5, 2/5
                 const num3 = weightedRandom([1, 2, 3], [2, 1, 2]);
-                log.push(`<strong>STEP C:</strong> Picked number <strong>${num3}</strong>. Algorithm terminated.`);
+                log.push(`<strong>STEP C:</strong> Picked number <strong>${num3}</strong>.`);
+                drawnNumbers.push(num3);
             };
 
             // --- STEP B ---
@@ -102,11 +104,10 @@
                 // Probabilities: 5/14, 2/14, 2/14, 5/14
                 const num2 = weightedRandom([1, 2, 3, 4], [5, 2, 2, 5]);
                 log.push(`<strong>STEP B:</strong> (First number was ${num1}) Picked number <strong>${num2}</strong>.`);
+                drawnNumbers.push(num2);
                 
                 if (num2 === 1 || num2 === 4) {
                     doStepC();
-                } else {
-                    log.push(`<em>Algorithm terminated (did not proceed to Step C).</em>`);
                 }
 
             } else if (num1 === 2 || num1 === 4) {
@@ -117,8 +118,34 @@
                 // Two coin flips (probabilities 1/2, 1/2)
                 const coin1 = weightedRandom([1, 2], [1, 1]);
                 const coin2 = weightedRandom([1, 2], [1, 1]);
-                log.push(`<strong>STEP B:</strong> (First number was 3) Flipped two coins: <strong>${coin1}</strong> and <strong>${coin2}</strong>. Algorithm terminated.`);
+                log.push(`<strong>STEP B:</strong> (First number was 3) Flipped two coins: <strong>${coin1}</strong> and <strong>${coin2}</strong>.`);
+                drawnNumbers.push(coin1, coin2);
             }
+
+            // --- STEP D ---
+            if (drawnNumbers.length >= 2) {
+                const first = drawnNumbers[0];
+                const second = drawnNumbers[1];
+                
+                // Check if the first two numbers picked match the specific combinations
+                const shouldRunStepD = 
+                    (first === 5 && second === 3) ||
+                    (first === 5 && second === 2) ||
+                    (first === 1 && second === 2) ||
+                    (first === 1 && second === 3) ||
+                    (first === 2 && second === 3) ||
+                    (first === 2 && second === 1) ||
+                    (first === 4 && second === 3) ||
+                    (first === 4 && second === 1);
+
+                if (shouldRunStepD) {
+                    // Coin flip (probabilities 1/2, 1/2)
+                    const lastCoin = weightedRandom([1, 2], [1, 1]);
+                    log.push(`<strong>STEP D:</strong> (First two numbers were ${first} and ${second}) Flipped a final coin: <strong>${lastCoin}</strong>.`);
+                }
+            }
+
+            log.push(`<em>Algorithm terminated.</em>`);
 
             // Render log to UI
             outputDiv.innerHTML = log.map(msg => `<div class="step">${msg}</div>`).join('');
