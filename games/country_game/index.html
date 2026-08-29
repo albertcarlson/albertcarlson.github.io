@@ -296,14 +296,15 @@
       </div>
       <p>Accuracy is capped at a max penalty of 100% off per round.</p>
       <p>Your score per guess is computed using:</p>
-      <div class="formula-box">min(10, 2 / √( |log₁.₁ ( real / guess )| ))</div>
+      <div class="formula-box">min(10, 3 / √( |log₁.₁ ( real / guess )| ))</div>
       <p><strong>Score Reference:</strong></p>
       <ul class="example-list">
-        <li>Less than ~0.4% off: <strong>10 points</strong></li>
-        <li>1% off: <strong>~6 points</strong></li>
-        <li>5% off: <strong>~2.8 points</strong></li>
-        <li>10% off: <strong>~2 points</strong></li>
-        <li>Order of magnitude off (10x / 0.1x): <strong>~0.4 points</strong></li>
+        <li>Less than ~0.8% off: <strong>Full 10 points</strong></li>
+        <li>1% off: <strong>~9.3 points</strong></li>
+        <li>5% off: <strong>~4.2 points</strong></li>
+        <li>10% off: <strong>~3 points</strong></li>
+        <li>25% off: <strong>~2 points</strong></li>
+        <li>Order of magnitude off (10x / 0.1x): <strong>~0.6 points</strong></li>
       </ul>
     </div>
   </div>
@@ -445,7 +446,7 @@
 
       if (absLog === 0) return 10;
 
-      const rawScore = 2 / Math.sqrt(absLog);
+      const rawScore = 3 / Math.sqrt(absLog);
       return Math.min(10, rawScore);
     }
 
