@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probabilistic Algorithm</title>
+    <style>
+        body { 
+            font-family: system-ui, -apple-system, sans-serif; 
+            padding: 30px; 
+            max-width: 600px; 
+            line-height: 1.5;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        input { 
+            padding: 8px; 
+            font-size: 16px; 
+            width: 100px;
+        }
+        button { 
+            padding: 8px 16px; 
+            font-size: 16px; 
+            cursor: pointer; 
+        }
+        #output { 
+            padding: 15px; 
+            border: 1px solid #ccc; 
+            background: #f9f9f9; 
+            border-radius: 4px;
+            min-height: 50px; 
+        }
+        .step { 
+            margin-bottom: 10px; 
+        }
+    </style>
+</head>
+<body>
+    <h2>Number Algorithm</h2>
+    
+    <div class="controls">
+        <label for="numInput">Pick a positive integer:</label><br><br>
+        <input type="number" id="numInput" min="1" step="1" value="5">
+        <button onclick="runAlgorithm()">Run Algorithm</button>
+    </div>
+
+    <div id="output">Waiting for input...</div>
+
+    <script>
+        /**
+         * Helper function to pick a choice based on relative weights.
+         */
+        function weightedRandom(choices, weights) {
+            const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let i = 0; i < choices.length; i++) {
+                if (random < weights[i]) {
+                    return choices[i];
+                }
+                random -= weights[i];
+            }
+            return choices[choices.length - 1]; // Fallback
+        }
+
+        function runAlgorithm() {
+            const inputVal = parseInt(document.getElementById('numInput').value);
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '';
+
+            // Validate positive integer
+            if (isNaN(inputVal) || inputVal <= 0) {
+                outputDiv.innerHTML = '<div class="step">Please enter a valid positive integer.</div>';
+                return;
+            }
+
+            // Check primary condition
+            if (inputVal !== 5) {
+                outputDiv.innerHTML = '<div class="step">not defined yet</div>';
+                return;
+            }
+
+            // If input is 5, begin the algorithm steps
+            let log = [];
+            let drawnNumbers = []; // Keep track of numbers as they are picked
+
+            // --- STEP A ---
+            // Probabilities: 14/42, 5/42, 4/42, 5/42, 14/42
+            const num1 = weightedRandom([1, 2, 3, 4, 5], [14, 5, 4, 5, 14]);
+            log.push(`<strong>STEP A:</strong> Picked number <strong>${num1}</strong>`);
+            drawnNumbers.push(num1);
+
+            // Reusable Step C function
+            const doStepC = () => {
+                // Probabilities: 2/5, 1/5, 2/5
+                const num3 = weightedRandom([1, 2, 3], [2, 1, 2]);
+                log.push(`<strong>STEP C:</strong> Picked number <strong>${num3}</strong>.`);
+                drawnNumbers.push(num3);
+            };
+
+            // --- STEP B ---
+            if (num1 === 1 || num1 === 5) {
+                // Probabilities: 5/14, 2/14, 2/14, 5/14
+                const num2 = weightedRandom([1, 2, 3, 4], [5, 2, 2, 5]);
+                log.push(`<strong>STEP B:</strong> (First number was ${num1}) Picked number <strong>${num2}</strong>.`);
+                drawnNumbers.push(num2);
+                
+                if (num2 === 1 || num2 === 4) {
+                    doStepC();
+                }
+
+            } else if (num1 === 2 || num1 === 4) {
+                log.push(`<strong>STEP B:</strong> (First number was ${num1}) Proceeding directly to Step C.`);
+                doStepC();
+
+            } else if (num1 === 3) {
+                // Two coin flips (probabilities 1/2, 1/2)
+                const coin1 = weightedRandom([1, 2], [1, 1]);
+                const coin2 = weightedRandom([1, 2], [1, 1]);
+                log.push(`<strong>STEP B:</strong> (First number was 3) Flipped two coins: <strong>${coin1}</strong> and <strong>${coin2}</strong>.`);
+                drawnNumbers.push(coin1, coin2);
+            }
+
+            // --- STEP D ---
+            if (drawnNumbers.length >= 2) {
+                const first = drawnNumbers[0];
+                const second = drawnNumbers[1];
+                
+                // Check if the first two numbers picked match the specific combinations
+                const shouldRunStepD = 
+                    (first === 5 && second === 3) ||
+                    (first === 5 && second === 2) ||
+                    (first === 1 && second === 2) ||
+                    (first === 1 && second === 3) ||
+                    (first === 2 && second === 3) ||
+                    (first === 2 && second === 1) ||
+                    (first === 4 && second === 3) ||
+                    (first === 4 && second === 1);
+
+                if (shouldRunStepD) {
+                    // Coin flip (probabilities 1/2, 1/2)
+                    const lastCoin = weightedRandom([1, 2], [1, 1]);
+                    log.push(`<strong>STEP D:</strong> (First two numbers were ${first} and ${second}) Flipped a final coin: <strong>${lastCoin}</strong>.`);
+                }
+            }
+
+            log.push(`<em>Algorithm terminated.</em>`);
+
+            // Render log to UI
+            outputDiv.innerHTML = log.map(msg => `<div class="step">${msg}</div>`).join('');
+        }
+    </script>
+</body>
+</html>
