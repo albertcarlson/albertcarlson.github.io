@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Country Population Guesser</title>
+  <style>
+    body {
+      background-color: #f5f5dc;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    #country-name {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    input[type="text"] {
+      font-size: 1.2rem;
+      padding: 10px 15px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      width: 250px;
+      text-align: center;
+    }
+
+    button {
+      font-size: 1rem;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    #score {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: #777;
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Scale everything 2x on desktop screens */
+    @media (min-width: 768px) {
+      #country-name {
+        font-size: 6rem;
+        margin-bottom: 40px;
+      }
+
+      .input-container {
+        gap: 30px;
+      }
+
+      input[type="text"] {
+        font-size: 2.4rem;
+        padding: 20px 30px;
+        border-width: 4px;
+        border-radius: 12px;
+        width: 500px;
+      }
+
+      button {
+        font-size: 2rem;
+        padding: 20px 50px;
+        border-radius: 12px;
+      }
+
+      #result {
+        margin-top: 40px;
+        font-size: 2.4rem;
+      }
+
+      #score {
+        top: 30px;
+        right: 40px;
+        font-size: 1.8rem;
+      }
+    }
+
+    /* EVERYTHING BELOW IF FOR Checkbox Container */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Custom Checkbox Box */
+    .checkbox-container input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background-color: #888888;
+      border-radius: 0; /* Completely square */
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      margin: 0;
+    }
+
+    /* Checked State (Navy Blue) */
+    .checkbox-container input[type="checkbox"]:checked {
+      background-color: #000080;
+    }
+
+    /* White Checkmark */
+    .checkbox-container input[type="checkbox"]::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+      transform: scale(0);
+      background-color: #ffffff;
+    }
+
+    .checkbox-container input[type="checkbox"]:checked::before {
+      transform: scale(1);
+    }
+
+    /* Desktop 2x Scaling for Checkbox */
+    @media (min-width: 768px) {
+      .checkbox-container {
+        font-size: 2rem;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+      .checkbox-container input[type="checkbox"] {
+        width: 40px;
+        height: 40px;
+      }
+      .checkbox-container input[type="checkbox"]::before {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="score">Accuracy: --</div>
+  <label class="checkbox-container">
+    <input type="checkbox" id="dep-toggle" />
+    <span>Include dependencies</span>
+  </label>
+  <div id="country-name">Loading...</div>
+
+  <div class="input-container">
+    <input type="text" id="guess-input" placeholder="Enter population" autofocus />
+    <button id="next-btn" class="hidden">Next</button>
+  </div>
+
+  <div id="result"></div>
+
+  <script>
+    let allCountries = []; // Stores all parsed CSV rows
+    let countries = [];    // Filtered pool used for selection
+    let colorMap = [];
+    let currentCountry = null;
+    let errorsHistory = [];
+    let isSubmitted = false;
+
+    const countryNameEl = document.getElementById('country-name');
+    const guessInput = document.getElementById('guess-input');
+    const resultEl = document.getElementById('result');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreEl = document.getElementById('score');
+    const depToggle = document.getElementById('dep-toggle');
+    
+    // Update pool whenever checkbox is toggled
+    depToggle.addEventListener('change', filterCountries);
+
+    function filterCountries() {
+      const includeDeps = depToggle.checked;
+      countries = includeDeps 
+        ? allCountries 
+        : allCountries.filter(c => !c.isDependency);
+
+      // If current country is excluded by turning toggle off, load a new one
+      if (!includeDeps && currentCountry && currentCountry.isDependency) {
+        loadNewCountry();
+      }
+    }
+
+    async function init() {
+      try {
+        const [csvResponse, colorsResponse] = await Promise.all([
+          fetch('country_populations.csv'),
+          fetch('country_correctness_colors.json')
+        ]);
+
+        const csvText = await csvResponse.text();
+        const jsonColors = await colorsResponse.json();
+
+        // Parse colors and sort thresholds descending
+        colorMap = Object.entries(jsonColors)
+          .map(([threshold, color]) => ({ threshold: Number(threshold), color }))
+          .sort((a, b) => b.threshold - a.threshold);
+
+        // Parse 3 columns: country, population, is_dependency
+        const lines = csvText.replace(/\r/g, '').trim().split('\n').slice(1);
+        allCountries = lines.map(line => {
+          const parts = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
+          if (parts.length < 3) return null;
+
+          const isDependency = parts[parts.length - 1].replace(/"/g, '').trim().toLowerCase() === 'true';
+          const population = parseInt(parts[parts.length - 2].replace(/"/g, '').trim(), 10);
+          const name = parts.slice(0, parts.length - 2).join(',').replace(/"/g, '').trim();
+
+          return { name, population, isDependency };
+        }).filter(c => c && c.name && !isNaN(c.population));
+
+        if (allCountries.length === 0) {
+          throw new Error('No valid countries parsed from CSV');
+        }
+
+        filterCountries();
+        loadNewCountry();      
+      } catch (err) {
+        countryNameEl.textContent = err;//'Error loading data';
+        console.error(err);
+      }
+    }
+
+    function loadNewCountry() {
+      if (!countries || countries.length === 0) return;
+
+      currentCountry = countries[Math.floor(Math.random() * countries.length)];
+      countryNameEl.textContent = currentCountry.name;
+      guessInput.value = '';
+      resultEl.textContent = '';
+      nextBtn.classList.add('hidden');
+      isSubmitted = false;
+      guessInput.focus();
+    }
+
+    function getColor(percentOff) {
+      for (const entry of colorMap) {
+        if (percentOff >= entry.threshold) {
+          return `#${entry.color.replace('#', '')}`;
+        }
+      }
+      return '#000000';
+    }
+function parsePopulationInput(rawInput) {
+      let cleanInput = rawInput.trim().toLowerCase();
+      if (!cleanInput) return NaN;
+
+      if (cleanInput.endsWith('k')) {
+        return parseFloat(cleanInput.slice(0, -1)) * 1_000;
+      }
+      if (cleanInput.endsWith('m')) {
+        return parseFloat(cleanInput.slice(0, -1)) * 1_000_000;
+      }
+      return parseFloat(cleanInput);
+    }
+
+    function submitGuess() {
+      const guess = parsePopulationInput(guessInput.value);
+      if (isNaN(guess)) return;
+
+      const realPop = currentCountry.population;
+      const percentOff = (Math.abs(guess - realPop) / realPop) * 100;
+
+      errorsHistory.push(percentOff);
+      const avgError = errorsHistory.reduce((a, b) => a + b, 0) / errorsHistory.length;
+      scoreEl.textContent = `Accuracy: ${avgError.toFixed(2)}% off`;
+
+      const color = getColor(percentOff);
+      resultEl.style.color = color;
+      resultEl.textContent = `Real population: ${realPop.toLocaleString()} (${percentOff.toFixed(2)}% off)`;
+
+      nextBtn.classList.remove('hidden');
+      isSubmitted = true;
+    }
+
+    guessInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        if (!isSubmitted) {
+          submitGuess();
+        } else {
+          loadNewCountry();
+        }
+      }
+    });
+
+    nextBtn.addEventListener('click', loadNewCountry);
+
+    init();
+  </script>
+</body>
+</html>

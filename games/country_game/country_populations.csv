@@ -1,0 +1,240 @@
+country,population,is_dependency
+"India",1429404000,false
+"China",1404890000,false
+"United States",341784857,false
+"Indonesia",288315089,false
+"Pakistan",241499431,false
+"Nigeria",223800000,false
+"Brazil",214211951,false
+"Bangladesh",169828911,false
+"Russia",146028325,false
+"Mexico",131231919,false
+"Japan",122680000,false
+"Democratic Republic of the Congo",116452162,false
+"Philippines",114849400,false
+"Ethiopia",111652998,false
+"Egypt",108613296,false
+"Vietnam",102300000,false
+"Iran",87134000,false
+"Turkey",86092168,false
+"Germany",83467117,false
+"Thailand",70250751,false
+"Tanzania",70038850,false
+"United Kingdom",69487000,false
+"France",69081996,false
+"South Africa",63522380,false
+"Italy",58940756,false
+"Kenya",54227015,false
+"Colombia",53399171,false
+"Sudan",53282719,false
+"Myanmar",51375327,false
+"South Korea",51088284,false
+"Spain",49801559,false
+"Algeria",47400000,false
+"Argentina",46466688,false
+"Iraq",46118793,false
+"Uganda",45905417,false
+"Afghanistan",43844000,false
+"Canada",41417056,false
+"Uzbekistan",39047321,false
+"Angola",38778554,false
+"Morocco",37254695,false
+"Poland",37243000,false
+"Saudi Arabia",35300280,false
+"Mozambique",34958973,false
+"Malaysia",34389400,false
+"Ghana",34378768,false
+"Peru",34157732,false
+"Yemen",32684503,false
+"Madagascar",32658977,false
+"Ivory Coast",32494020,false
+"Nepal",30034040,false
+"Cameroon",29442327,false
+"Ukraine",28700000,false
+"Venezuela",28633711,false
+"Australia",27801023,false
+"Niger",27522750,false
+"Syria",26472497,false
+"North Korea",25950000,false
+"Burkina Faso",24736828,false
+"Mali",23929000,false
+"Taiwan",23235002,false
+"Zambia",23003214,false
+"Sri Lanka",21756000,false
+"Malawi",21201635,false
+"Kazakhstan",20590589,false
+"Somalia",20305907,false
+"Chile",20150948,false
+"Chad",20031602,false
+"Senegal",19575061,false
+"Romania",19041322,false
+"Guatemala",18312373,false
+"Ecuador",18243816,false
+"Netherlands",18153386,false
+"Cambodia",17816143,false
+"Guinea",17521167,false
+"Zimbabwe",17073087,false
+"South Sudan",15786898,false
+"Rwanda",14418145,false
+"Benin",13551992,false
+"Burundi",12332788,false
+"Tunisia",11992843,false
+"Jordan",11937000,false
+"Belgium",11936546,false
+"Haiti",11867032,false
+"Portugal",11424031,false
+"Bolivia",11365333,false
+"United Arab Emirates",11294243,false
+"Czech Republic",10896003,false
+"Dominican Republic",10771504,false
+"Tajikistan",10721000,false
+"Sweden",10610483,false
+"Greece",10372335,false
+"Israel",10273700,false
+"Azerbaijan",10273450,false
+"Honduras",10186738,false
+"Papua New Guinea",10185363,false
+"Hungary",9488428,false
+"Cuba",9434593,false
+"Sierra Leone",9270700,false
+"Austria",9217573,false
+"Switzerland",9139676,false
+"Belarus",9056080,false
+"Togo",8095498,false
+"Laos",7745000,false
+"Libya",7539852,false
+"Hong Kong (China)",7510800,true
+"Kyrgyzstan",7404300,false
+"Turkmenistan",7057841,false
+"Nicaragua",6874748,false
+"Serbia",6532019,false
+"Central African Republic",6470307,false
+"Bulgaria",6423207,false
+"Republic of the Congo",6142180,false
+"Singapore",6110200,false
+"Paraguay",6109644,false
+"Denmark",6031699,false
+"El Salvador",6029976,false
+"Lebanon",5895466,false
+"Finland",5655296,false
+"Norway",5636904,false
+"Palestine",5557096,false
+"Ireland",5525600,false
+"Slovakia",5405368,false
+"Oman",5398645,false
+"New Zealand",5357300,false
+"Liberia",5248621,false
+"Costa Rica",5217296,false
+"Mauritania",4927532,false
+"Kuwait",4881254,false
+"Panama",4064780,false
+"Georgia",3941100,false
+"Croatia",3866233,false
+"Eritrea",3682669,false
+"Mongolia",3591120,false
+"Uruguay",3480601,false
+"Bosnia and Herzegovina",3412000,false
+"Qatar",3370611,false
+"Puerto Rico (US)",3184835,true
+"Armenia",3096900,false
+"Namibia",3022401,false
+"Lithuania",2886179,false
+"Jamaica",2774538,false
+"Gabon",2469296,false
+"Gambia",2422712,false
+"Moldova",2365600,false
+"Botswana",2359609,false
+"Albania",2335930,false
+"Slovenia",2136385,false
+"Lesotho",2116427,false
+"Guinea-Bissau",1890252,false
+"Latvia",1832100,false
+"North Macedonia",1819074,false
+"Equatorial Guinea",1668768,false
+"Bahrain",1603260,false
+"Kosovo",1585566,false
+"Timor-Leste",1409452,false
+"Trinidad and Tobago",1367764,false
+"Estonia",1360745,false
+"Mauritius",1241856,false
+"Eswatini",1235549,false
+"Djibouti",1066809,false
+"Cyprus",983000,false
+"Guyana",956044,false
+"Comoros",944388,false
+"Fiji",902623,false
+"Bhutan",784043,false
+"Solomon Islands",750325,false
+"Luxembourg",690959,false
+"Macau (China)",686500,true
+"Montenegro",622902,false
+"Suriname",616500,false
+"Western Sahara (disputed)",610813,true
+"Malta",588254,false
+"Maldives",515132,false
+"Cape Verde",491233,false
+"Northern Cyprus",476214,true
+"Brunei",458600,false
+"Belize",418982,false
+"Bahamas",398165,false
+"Iceland",396500,false
+"Transnistria",367776,true
+"Vanuatu",321409,false
+"French Polynesia (France)",279500,true
+"New Caledonia (France)",264596,true
+"Barbados",261692,false
+"Abkhazia",244236,true
+"São Tomé and Príncipe",209607,false
+"Samoa",205557,false
+"Saint Lucia",184100,false
+"Curaçao (Netherlands)",156115,true
+"Guam (US)",153836,true
+"Seychelles",123097,false
+"Kiribati",120740,false
+"Aruba (Netherlands)",110625,true
+"Saint Vincent and the Grenadines",109296,true
+"Grenada",109021,false
+"Antigua and Barbuda",103603,false
+"Jersey (UK)",104540,true
+"Tonga",100179,false
+"Andorra",89752,false
+"Cayman Islands (UK)",88833,true
+"U.S. Virgin Islands (US)",87146,true
+"Isle of Man (UK)",84975,true
+"Micronesia",75817,false
+"Dominica",65514,false
+"Guernsey (UK)",64781,true
+"Bermuda (UK)",64055,true
+"Greenland (Denmark)",56945,true
+"South Ossetia",56520,true
+"Faroe Islands (Denmark)",55505,true
+"Turks and Caicos Islands (UK)",52299,true
+"Saint Kitts and Nevis",51320,false
+"American Samoa (US)",49710,true
+"Northern Mariana Islands (US)",47329,true
+"Marshall Islands",42418,false
+"Sint Maarten (Netherlands)",41349,true
+"Liechtenstein",41237,false
+"British Virgin Islands (UK)",39471,true
+"Monaco",38857,false
+"Gibraltar (UK)",38196,true
+"San Marino",34167,false
+"Saint Martin (France)",31496,true
+"Palau",16733,false
+"Anguilla (UK)",16010,true
+"Cook Islands (New Zealand)",15040,true
+"Nauru",11680,false
+"Wallis and Futuna (France)",11620,true
+"Tuvalu",10643,false
+"Saint Barthélemy (France)",10562,true
+"Saint Pierre and Miquelon (France)",5819,true
+"Saint Helena Ascension and Tristan da Cunha (UK)",5651,true
+"Montserrat (UK)",4386,true
+"Falkland Islands (UK)",3662,true
+"Tokelau (New Zealand)",2608,true
+"Norfolk Island (Australia)",2188,true
+"Christmas Island (Australia)",1692,true
+"Niue (New Zealand)",1681,true
+"Vatican City",882,false
+"Cocos (Keeling) Islands (Australia)",593,true
+"Pitcairn Islands (UK)",40,true
