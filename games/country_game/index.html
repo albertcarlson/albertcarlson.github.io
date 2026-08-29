@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Country Population Guesser</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.4/dist/katex.min.js"></script>
   <style>
     body {
       background-color: #f5f5dc;
@@ -191,20 +193,24 @@
         font-size: 1.8rem;
         gap: 8px;
       }
+
       .help-btn {
         width: 32px;
         height: 32px;
         font-size: 1.4rem;
         border-width: 2px;
       }
+
       .modal-content {
         max-width: 700px;
         padding: 40px;
         font-size: 1.5rem;
       }
+
       .modal-header {
         font-size: 2rem;
       }
+
       .formula-box {
         font-size: 1.4rem;
         padding: 16px;
@@ -296,15 +302,18 @@
       </div>
       <p>Accuracy is capped at a max penalty of 100% off per round.</p>
       <p>Your score per guess is computed using:</p>
-      <div class="formula-box">min(10, 3 / √( |log₁.₁ ( real / guess )| ))</div>
+
+      <!-- Formula container with plain-text fallback as initial content -->
+      <div id="formula-box" class="formula-box">5 / ¹⁶√( log₁.₁( real / guess )⁸ + 2⁻¹⁶ )</div>
+
       <p><strong>Score Reference:</strong></p>
       <ul class="example-list">
-        <li>Less than ~0.8% off: <strong>Full 10 points</strong></li>
-        <li>1% off: <strong>~9.3 points</strong></li>
-        <li>5% off: <strong>~4.2 points</strong></li>
-        <li>10% off: <strong>~3 points</strong></li>
-        <li>25% off: <strong>~2 points</strong></li>
-        <li>Order of magnitude off (10x / 0.1x): <strong>~0.6 points</strong></li>
+        <li>Less than 1% off: <strong>Full 10 points</strong></li>
+        <li>3% off: <strong>~9 points</strong></li>
+        <li>5% off: <strong>~7 points</strong></li>
+        <li>10% off: <strong>~5 points</strong></li>
+        <li>25% off: <strong>~3 points</strong></li>
+        <li>Order of magnitude off (10x / 0.1x): <strong>~1 point</strong></li>
       </ul>
     </div>
   </div>
@@ -341,6 +350,10 @@
     const helpModal = document.getElementById('help-modal');
     const closeModal = document.getElementById('close-modal');
 
+    // Pre-calculate natural log of 1.1 for performance
+    const LN_1_1 = Math.log(1.1);
+    const EPSILON = 1 / 65536; // Exact 2^-16
+
     // Update pool whenever checkbox is toggled
     depToggle.addEventListener('change', filterCountries);
 
@@ -349,6 +362,26 @@
     closeModal.addEventListener('click', () => helpModal.classList.add('hidden'));
     helpModal.addEventListener('click', (e) => {
       if (e.target === helpModal) helpModal.classList.add('hidden');
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('formula-box');
+      const latexString = `\\frac{5}{\\left(\\log_{1.1}\\left(\\frac{\\text{real}}{\\text{guess}}\\right)^{8}+2^{-16}\\right)^{\\frac{1}{16}}}`;
+
+      // Check if KaTeX loaded successfully
+      if (typeof katex !== 'undefined') {
+        try {
+          katex.render(latexString, container, {
+            throwOnError: true,
+            displayMode: true // Centers and scales nicely inside the modal box
+          });
+        } catch (e) {
+          console.warn('KaTeX rendering failed, falling back to plain text:', e);
+          // Container remains as the original plain-text HTML content
+        }
+      } else {
+        console.warn('KaTeX not detected, using plain-text fallback.');
+      }
     });
 
     function filterCountries() {
@@ -438,16 +471,16 @@
     }
 
     function calculateGuessScore(real, guess) {
-      if (guess <= 0) return 0;
+      if (guess <= 1 || real <= 0) return 0;
 
-      const ratio = real / guess;
-      const logBase1_1 = Math.log(ratio) / Math.log(1.1);
-      const absLog = Math.abs(logBase1_1);
+      const ratio = real / guess
 
-      if (absLog === 0) return 10;
+      if (Math.abs(ratio - 1) < 0.01) return 10;
 
-      const rawScore = 3 / Math.sqrt(absLog);
-      return Math.min(10, rawScore);
+      const log1_1 = Math.log(ratio) / LN_1_1;
+      const score = 5 / Math.pow(Math.pow(log1_1, 8) + EPSILON, 1 / 16);
+
+      return score;
     }
 
     function submitGuess() {
