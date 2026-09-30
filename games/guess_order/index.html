@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4ef">
+  <title>Guess the order — Albert Carlson</title>
+  <meta name="description" content="Place numbers from 1–99 in ascending order as they arrive. Choose 4, 5, or 6 numbers and test your intuition.">
+  <link rel="stylesheet" href="style.css">
+  <script src="game.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <a class="back-to-games" href="../../minigames.html">← Back to minigames</a>
+    <section class="intro"><h1>Guess the order<span>.</span></h1></section>
+    <aside class="rules"><span aria-hidden="true">i</span><p>Numbers are 1–99. Place each number from <strong>smallest to largest</strong>. Numbers arrive one at a time, and placements are final. Get them all in order to win.</p></aside>
+    <section class="settings" aria-label="Game settings">
+      <label class="size-label" for="size">Numbers <select id="size"><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option></select></label>
+      <fieldset><legend class="sr-only">When to end the game</legend><div class="segmented"><label><input type="radio" name="mode" value="keep" checked><span>Keep you in</span></label><label><input type="radio" name="mode" value="early"><span>Terminate early</span></label></div></fieldset>
+    </section>
+    <p id="mode-help" class="mode-help">Play until the next number has nowhere to go.</p>
+    <section class="game" aria-label="Game board">
+      <div id="arrival" aria-live="polite" aria-atomic="true"><p id="step" class="eyebrow">PREPARING YOUR NUMBERS</p><div id="current" class="current">—</div><p id="prompt" class="prompt">Choose an empty slot below</p></div>
+      <div class="direction"><span>SMALLEST</span><span aria-hidden="true">→</span><span>LARGEST</span></div>
+      <div id="slots" class="slots"></div>
+      <section id="result" class="result" aria-live="polite" hidden><p id="result-icon" class="result-icon" aria-hidden="true"></p><h2 id="result-title"></h2><p id="result-copy"></p><p id="answer" class="answer"></p><button id="again" class="primary">Play again <span aria-hidden="true">↗</span></button></section>
+    </section>
+    <footer class="proof"><p class="proof-title"><span aria-hidden="true">⌁</span> Locked in before you play</p><p class="proof-note">SHA-256 commitment · numbers + a secret 32-letter salt</p><code id="hash">Calculating…</code><div id="reveal" hidden><p class="proof-title">Original string · hash this exact text to verify</p><code id="original"></code><button id="copy" class="text-button">Copy original string</button></div></footer>
+  </main>
+</body>
+</html>
