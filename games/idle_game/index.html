@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#12345b"><title>Aeroclub — Airline manager</title>
+  <meta name="description" content="Build your airline in Aeroclub: fly passengers, unlock airports, upgrade your fleet, and automate departures.">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="config.js"></script><script defer src="engine.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./"><span class="brand-icon">↗</span> aeroclub</a><div class="save-status" id="save-status">● LOCAL SAVE</div></header>
+  <main>
+    <a class="back-to-games" href="../../minigames.html">← Back to minigames</a>
+    <section class="heading"><h1>Your airline</h1></section>
+    <section class="metrics" aria-label="Airline statistics">
+      <div class="metric balance"><span>BALANCE</span><strong id="cash">$0</strong><small id="income">+$0 / sec from airport services</small></div>
+      <div class="metric"><span>YOUR FLEET</span><strong id="fleet-count">01 <em>aircraft</em></strong><small id="airborne">0 currently airborne</small></div>
+      <div class="metric"><span>AIRPORTS</span><strong id="city-count">02 <em>airports</em></strong><small id="passengers">0 passengers welcomed</small></div>
+      <div class="metric"><span>TICKET PRICE</span><strong id="fare">$3</strong><small id="capacity">8 seats per aircraft</small></div>
+    </section>
+    <div class="workspace">
+      <div class="operations">
+        <section class="map-panel"><div class="panel-title"><div><h2>Route map</h2></div><span class="map-label">LIVE ROUTE MAP <span class="live-dot"></span></span></div>
+          <div class="map-wrap"><svg id="world-map" viewBox="0 0 900 440" role="img" aria-label="World route map with unlocked airports and aircraft in flight"><defs><pattern id="grid" width="45" height="44" patternUnits="userSpaceOnUse"><path d="M 45 0 L 0 0 0 44" fill="none" stroke="#c3d5e8" stroke-width=".6" opacity=".4"/></pattern></defs><rect width="900" height="440" fill="url(#grid)"/>
+          <image href="world-map.svg" width="900" height="440"/><g id="map-routes"></g><g id="map-cities"></g><g id="map-planes"></g></svg>
+          <div class="map-caption"><span><i class="legend-dot"></i> Your airports <i class="legend-dot muted"></i> Future destinations</span></div></div>
+        </section>
+        <section class="fleet-section"><div class="section-title"><div><h2>Fleet <span id="fleet-badge" class="count-badge">1</span></h2></div><span id="manager-status">Manual dispatch</span></div><div id="fleet" class="fleet"></div></section>
+        <section class="activity"><div class="section-title"><h2>Recent arrivals</h2><span id="total-flights">0 flights completed</span></div><div id="activity-list"><p class="empty">No arrivals yet.</p></div></section>
+      </div>
+      <aside class="upgrade-panel"><div class="upgrade-heading"><h2>Upgrades</h2></div><div class="tabs" role="tablist" aria-label="Upgrade categories"><button role="tab" aria-selected="true" id="tab-airline" data-tab="airline" aria-controls="upgrades">Airline</button><button role="tab" aria-selected="false" id="tab-airports" data-tab="airports" aria-controls="upgrades">Airports</button></div><div id="upgrades" role="tabpanel" aria-labelledby="tab-airline"></div></aside>
+    </div>
+    <footer><span>Aeroclub</span><div><button id="help-button">How to play</button><button id="reset-button">New airline</button></div></footer>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="help"><button class="close" aria-label="Close instructions">×</button><h2>How to play</h2><p>Click a parked plane or its departure button to take off. Choose its next destination before departure. Tickets are paid <b>only on landing</b>: passengers × ticket price.</p><p>Passenger demand depends on the departure airport, varies randomly, and never exceeds your seat capacity. Buy airports in order to open new routes. New planes start in Berlin.</p><p>Fleet upgrades apply to every plane on its next departure. A manager automatically launches landed planes after 10, 9, ..., 3, 2, then 1 second. Each automatic departure randomly chooses an unlocked airport other than the current one. The destination selector applies to manual departures.</p><p>Airport services earn cash every second without flying. Your airline saves locally and runs for up to 8 hours while away; only a manager can start new flights while you’re gone.</p><button class="primary close-help">Close</button></dialog>
+  <dialog id="reset-dialog"><h2>Start a new airline?</h2><p>This deletes this browser’s saved fleet, cash, and upgrades.</p><div class="dialog-actions"><button id="cancel-reset">Keep my airline</button><button id="confirm-reset" class="primary">Start over</button></div></dialog>
+</body></html>

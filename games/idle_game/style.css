@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{--paper:#f3f7fc;--ink:#173858;--muted:#526b85;--line:#d3dfec;--blue:#2367b6;--pale-blue:#d6eaff;--orange:#ed8a3c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px}
+button,select{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed}
+button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+.topbar{height:84px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 5%;gap:38px}
+.brand{font-family:Manrope,sans-serif;font-size:31px;font-weight:800;letter-spacing:-1.5px;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:9px}
+.brand-icon{background:var(--ink);color:var(--pale-blue);font-size:33px;border-radius:50%;width:39px;height:39px;line-height:35px;text-align:center}
+.brand-dot{font-size:15px;align-self:flex-start;margin-top:6px}
+.tagline,.save-status,.eyebrow,.map-label,.date-badge{font-size:14px;font-weight:700;letter-spacing:.6px}
+.tagline{color:var(--muted)}
+.save-status{margin-left:auto;color:#426b94;font-size:12px}
+main{max-width:1500px;padding:38px 5% 0;margin:auto}
+.back-to-games{display:inline-flex;align-items:center;min-height:44px;margin-bottom:12px;color:var(--blue);font-size:14px;text-decoration:none}
+.back-to-games:hover{text-decoration:underline}
+.heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px}
+.eyebrow{color:#526b85;font-size:12px}
+h1,h2,p{margin:0}
+h1,h2{font-family:Manrope,sans-serif}
+h1{font-size:clamp(27px,3vw,42px);font-weight:600;letter-spacing:-1.8px;margin:8px 0 10px}
+.heading p{color:var(--muted);font-size:15px}
+.date-badge{border:1px solid var(--line);border-radius:30px;padding:12px 15px;font-size:12px;display:flex;align-items:center;gap:8px}
+.live-dot{display:inline-block;width:6px;height:6px;background:#3986d6;border-radius:50%}
+.metrics{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;margin-bottom:30px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#ffffff}
+.metric{padding:24px 26px;display:flex;flex-direction:column;border-right:1px solid var(--line)}
+.metric:last-child{border:0}
+.metric>span{font-size:12px;letter-spacing:.6px;color:var(--muted);font-weight:700}
+.metric strong{font-size:32px;font-weight:500;letter-spacing:-1px;margin:7px 0}
+.metric em{font-size:15px;letter-spacing:0;font-weight:400;font-style:normal;color:var(--muted)}
+.metric small{color:var(--muted);font-size:14px}
+.balance{background:var(--ink);color:var(--pale-blue)}
+.balance>span,.balance small{color:#c4def8}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:26px;align-items:start}
+.map-panel{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#e8f1fa}
+.panel-title{display:flex;justify-content:space-between;align-items:center;padding:23px 25px 0}
+h2{font-size:24px;font-weight:600;letter-spacing:-.6px}
+.panel-title h2{margin-top:6px}
+.map-label{font-size:12px;letter-spacing:.4px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.map-wrap{position:relative;padding:5px 13px 15px}
+#world-map{width:100%;height:auto;display:block}
+.land{fill:#c9daed;stroke:#e8f1fa;stroke-width:2;stroke-linejoin:round}
+.map-caption{display:flex;justify-content:space-between;padding:0 10px;font-size:12px;color:#526b85;letter-spacing:.7px;gap:12px}
+.legend-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--orange);margin-right:4px}
+.legend-dot.muted{background:#91abc4;margin-left:12px}
+.map-city{fill:var(--orange);stroke:#ffffff;stroke-width:2}
+.map-city.locked{fill:#839db8;stroke:none}
+.city-label{font:600 13px 'DM Sans',sans-serif;fill:#244e79;paint-order:stroke;stroke:#e8f1fa;stroke-width:3px}
+.route{stroke:#347ac0;stroke-width:1.4;stroke-dasharray:5 5;fill:none}
+.flying-icon{fill:#2367b6;font-size:22px;paint-order:stroke;stroke:#e8f1fa;stroke-width:2px}
+.section-title{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:26px 0 15px;gap:10px}
+.section-title h2{font-size:22px;margin-top:4px}
+.section-title>span{font-size:14px;color:var(--muted)}
+.count-badge{font-size:14px;vertical-align:middle;background:#e2ebf6;padding:4px 7px;border-radius:5px;margin-left:7px}
+.fleet{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:16px}
+.plane-card{background:#ffffff;border:1px solid var(--line);border-radius:11px;padding:18px}
+.plane-top{display:flex;justify-content:space-between;align-items:center}
+.plane-name{font-size:14px;font-weight:700;letter-spacing:.4px}
+.status-pill{font-size:12px;padding:5px 7px;border-radius:4px;background:#e7f0fb;color:#426b94;letter-spacing:.5px}
+.status-pill.flying{background:#e3efff;color:#245a99}
+.plane-visual{height:76px;display:flex;align-items:center;justify-content:center;position:relative}
+.plane-launch{border:0;background:none;color:#3878bb;font-size:56px;transform:rotate(-15deg);line-height:1;transition:transform .2s}
+.plane-launch:hover:enabled{transform:rotate(-15deg) translate(5px,-4px)}
+.plane-launch:disabled{color:#87a4c3}
+.plane-visual:before{content:'';position:absolute;width:120px;border-top:1px dashed #c0d3e8;transform:rotate(-15deg);pointer-events:none}
+.plane-launch{z-index:1;text-shadow:0 3px #ffffff}
+.route-row{display:flex;align-items:center;gap:8px;margin:3px 0 12px}
+.airport-origin{font-size:24px;font-weight:600;letter-spacing:-.7px}
+.route-arrow{color:#7c9abc;margin-left:auto}
+.route-select{border:0;background:#edf3fb;border-radius:5px;padding:6px;color:var(--ink);font-size:14px;max-width:65%}
+.flight-detail{font-size:14px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.progress{height:3px;background:#e2ebf6;border-radius:3px;margin:12px 0;overflow:hidden}
+.progress>div{height:100%;width:100%;background:#3b82cf;transform:scaleX(0);transform-origin:left}
+.depart-button{border:1px solid #bfd5ef;background:#e6f0fc;color:#265e9d;width:100%;border-radius:6px;padding:12px 10px;font-size:14px;font-weight:600}
+.depart-button:hover:enabled{background:var(--pale-blue)}
+.depart-button:disabled{background:#eef3f9;color:#59738f;border-color:#dae4f0}
+.upgrade-panel{border:1px solid var(--line);border-radius:13px;background:#ffffff;overflow:hidden}
+.upgrade-heading{padding:25px 23px 21px}
+.upgrade-heading h2{font-size:26px;margin:7px 0 8px}
+.upgrade-heading p{font-size:14px;color:var(--muted)}
+.tabs{display:flex;margin:0 22px 8px;border-bottom:1px solid var(--line);gap:25px}
+.tabs button{border:0;background:none;padding:12px 0;color:var(--muted);font-size:15px}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom:2px solid var(--ink);font-weight:700}
+.upgrade-item{padding:19px 22px;border-bottom:1px solid #e1e9f3}
+.upgrade-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.upgrade-icon{background:#e8f1fc;border-radius:7px;width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px;color:#3671af}
+.upgrade-name{font-size:15px;font-weight:600}
+.level{white-space:nowrap;font-size:12px;color:#526b85;margin-left:auto;letter-spacing:.6px}
+.upgrade-item p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+.buy-button{width:100%;display:flex;justify-content:space-between;align-items:center;background:var(--blue);color:#ffffff;border:0;border-radius:6px;font-size:14px;padding:12px 14px}
+.buy-button:disabled{background:#e8eef6;color:#607791}
+.buy-button:hover:enabled{background:#185697}
+.tip{display:flex;padding:20px 22px;gap:12px;background:#eaf2fb;color:#526b85}
+.tip>span{font-size:27px}
+.tip p{font-size:14px;line-height:1.8}
+.tip b{color:#315b88;font-weight:500}
+.activity{padding-bottom:12px}
+.activity .section-title h2{font-size:18px}
+.empty{color:var(--muted);font-size:14px;padding:16px 0}
+.arrival{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+.arrival>span:first-child{color:#4a81b8;font-size:16px}
+.arrival small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.arrival strong{margin-left:auto;font-weight:500;color:#2765a4}
+footer{border-top:1px solid var(--line);margin-top:32px;padding:22px 0;display:flex;justify-content:space-between;color:#607791;font-size:14px}
+footer button{border:0;background:none;color:#526b85;font-size:14px;margin-left:15px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#edf6ff;padding:14px 22px;border-radius:9px;box-shadow:0 8px 30px #17385820;opacity:0;pointer-events:none;transition:.2s;max-width:90%;z-index:5;font-size:15px}
+#toast.visible{opacity:1;transform:translate(-50%,0)}
+dialog{border:1px solid var(--line);border-radius:15px;background:var(--paper);color:var(--ink);padding:30px;max-width:510px;width:90%}
+dialog::backdrop{background:#12345b88;backdrop-filter:blur(3px)}
+dialog h2{margin:10px 0 15px}
+dialog p{font-size:15px;color:#526b85;line-height:1.8;margin-bottom:16px}
+.close{position:absolute;right:15px;top:10px;border:0;background:none;font-size:26px;color:var(--muted)}
+.primary{background:var(--blue);color:white;border:0;border-radius:6px;padding:12px 20px}
+.dialog-actions{display:flex;gap:10px;justify-content:flex-end}
+.dialog-actions>button:not(.primary){border:1px solid var(--line);border-radius:6px;background:none;color:var(--ink)}
+
+@media(min-width:1500px){.topbar{padding-left:calc((100vw - 1350px)/2);padding-right:calc((100vw - 1350px)/2)}
+}
+@media(max-width:1050px){.workspace{grid-template-columns:minmax(0,1fr) 340px;gap:18px}
+.fleet{grid-template-columns:1fr}
+.metric{padding:20px 16px}
+.map-label{display:none}
+}
+@media(max-width:760px){.topbar{height:68px;padding:0 6%}
+.tagline{display:none}
+main{padding:26px 5% 0}
+.heading{margin-bottom:23px}
+.date-badge{display:none}
+.metrics{grid-template-columns:1fr 1fr;gap:0;margin-bottom:22px}
+.metric{padding:18px;border-bottom:1px solid var(--line)}
+.metric:nth-child(2){border-right:0}
+.metric:nth-child(3){border-bottom:0}
+.metric strong{font-size:29px}
+.workspace{grid-template-columns:1fr}
+.fleet{grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr))}
+.upgrade-panel{margin-top:10px}
+.panel-title{padding:20px 20px 0}
+.panel-title h2{font-size:22px}
+footer{gap:15px}
+.section-title>span{font-size:12px}
+}
+@media(max-width:420px){.fleet{grid-template-columns:1fr}
+.save-status{font-size:12px}
+.brand{font-size:27px}
+h1{font-size:30px}
+.metric small{font-size:12px}
+.map-caption{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}
+}
+
+
+.route-select{min-height:42px}
+.metric small{line-height:1.5}
+.map-caption{padding-top:8px}
+.plane-name{letter-spacing:.3px}
+.upgrade-heading{padding-bottom:10px}
+.arrival{align-items:flex-start}
+.balance{color:white}
+.map-wrap{padding-top:15px}
+.brand-icon{color:#d6eaff}
+.tabs button{min-height:44px}
+footer button{min-height:44px}
+@media(max-width:420px){.metric{padding:15px 12px}
+.metric em{display:block;font-size:14px}
+.metric strong{min-height:60px}
+footer{align-items:center;flex-wrap:wrap}
+.save-status{max-width:110px;text-align:right}
+}
+
+
+#cash{font-variant-numeric:tabular-nums}
+
+/* Large fleets use the same cached cards and controls in a denser layout. */
+.fleet.fleet-compact{grid-template-columns:repeat(auto-fit,minmax(min(100%,285px),1fr));gap:10px}
+.fleet-compact .plane-card{display:grid;grid-template-columns:minmax(0,1fr) 40px;gap:5px 8px;padding:12px;align-content:start}
+.fleet-compact .plane-top{grid-column:1;grid-row:1;gap:8px;min-width:0}
+.fleet-compact .plane-visual{grid-column:2;grid-row:1;height:32px}
+.fleet-compact .plane-visual:before{display:none}
+.fleet-compact .plane-launch{font-size:27px;width:40px;height:32px;text-shadow:none}
+.fleet-compact .status-pill{font-size:12px;letter-spacing:0;padding:4px 6px;white-space:nowrap}
+.fleet-compact .route-row{grid-column:1 / -1;margin:0;min-width:0}
+.fleet-compact .airport-origin{font-size:20px}
+.fleet-compact .route-select{min-width:0;min-height:36px;flex:1;max-width:none;padding:6px 8px}
+.fleet-compact .route-arrow{margin-left:0}
+.fleet-compact .flight-detail{grid-column:1 / -1;font-size:14px;line-height:1.3}
+.fleet-compact .progress{grid-column:1 / -1;margin:2px 0;height:3px}
+.fleet-compact .depart-button{grid-column:1 / -1;min-height:36px;padding:7px 10px;line-height:1.4}
+@media(pointer:coarse){
+  .fleet-compact .plane-visual,.fleet-compact .plane-launch{height:44px}
+  .fleet-compact .route-select,.fleet-compact .depart-button{min-height:44px}
+}
