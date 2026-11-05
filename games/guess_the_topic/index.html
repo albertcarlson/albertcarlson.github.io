@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guess the topic</title>
+<style>
+* { box-sizing: border-box }
+body { margin: 0; background: #ebd9ff; color: #201725; font-family: Arial, sans-serif }
+main {
+  min-height: 100svh; padding: clamp(24px, 5vw, 72px);
+  display: grid; grid-template-rows: auto 1fr auto; gap: 28px; text-align: center;
+}
+h1 { margin: 0; font-size: clamp(44px, 7vw, 96px); letter-spacing: -.065em; line-height: 1 }
+#flags {
+  --gap: clamp(8px, 2vw, 30px); --columns: 1;
+  align-self: center; justify-self: center; width: min(100%, 1400px, calc(var(--columns) * min(50svh, 450px) + (var(--columns) - 1) * var(--gap)));
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--gap);
+}
+figure {
+  flex: 0 0 min(50svh, 450px, calc((100% - (var(--columns) - 1) * var(--gap)) / var(--columns)));
+  min-width: 0; margin: 0;
+}
+img { display: block; width: 100%; aspect-ratio: 2 / 1; object-fit: contain }
+figcaption { font-weight: bold; font-size: clamp(12px, 1.6vw, 22px); margin-top: 10px }
+button {
+  justify-self: center; background: #201725; color: white; border: 0;
+  border-radius: 99px; padding: 16px 32px; font: bold clamp(20px, 2vw, 28px) Arial, sans-serif;
+  letter-spacing: -.035em; cursor: pointer;
+}
+button:hover { background: #403348 }
+button:focus-visible { outline: 3px solid #201725; outline-offset: 5px }
+#answer { max-width: 800px; margin: 0 auto; font-size: clamp(18px, 2vw, 26px); font-weight: bold }
+@media (prefers-reduced-motion: no-preference) {
+  figure { animation: appear .22s ease-out }
+  @keyframes appear { from { opacity: 0; transform: translateY(6px) } }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Guess the topic</h1>
+  <section id="flags" aria-label="Revealed hints" aria-live="polite"></section>
+  <button id="next" type="button">Reveal next</button>
+  <p id="answer" hidden tabindex="-1">These are the flags of the seven UAE emirates, followed by the national flag. Fujairah is shown with its historical plain-red flag.</p>
+</main>
+<script>
+const hints = [
+  ['sharjah', 'Sharjah', 'Red rectangle surrounded by a white border'],
+  ['dubai', 'Dubai', 'Red field with a white stripe at the left'],
+  ['abu-dhabi', 'Abu Dhabi', 'Red field with a white rectangle in the upper left'],
+  ['ras-al-khaimah', 'Ras Al Khaimah', 'Red rectangle surrounded by a white border'],
+  ['ajman', 'Ajman', 'Red field with a white stripe at the left'],
+  ['fujairah', 'Fujairah', 'Solid red flag'],
+  ['umm-al-quwain', 'Umm Al Quwain', 'Red field with a white stripe, crescent and star'],
+  ['uae', 'United Arab Emirates', 'Green, white and black stripes with a vertical red band at the left']
+];
+const flags = document.querySelector('#flags');
+const button = document.querySelector('#next');
+function showHint() {
+  const index = flags.children.length;
+  const [file, , description] = hints[index];
+  const figure = document.createElement('figure');
+  const image = new Image();
+  image.src = 'flags/' + file + '.svg';
+  image.alt = 'Hint ' + (index + 1) + '. ' + description;
+  figure.append(image);
+  flags.append(figure);
+  flags.style.setProperty('--columns', Math.min(index + 1, 4));
+  if (flags.children.length === hints.length) button.textContent = 'Reveal answer';
+}
+button.addEventListener('click', () => {
+  if (flags.children.length < hints.length) {
+    showHint();
+    return;
+  }
+  [...flags.children].forEach((figure, index) => {
+    const caption = document.createElement('figcaption');
+    caption.textContent = hints[index][1];
+    figure.append(caption);
+  });
+  document.querySelector('h1').textContent = 'United Arab Emirates';
+  button.hidden = true;
+  const answer = document.querySelector('#answer');
+  answer.hidden = false;
+  answer.focus();
+});
+showHint();
+</script>
+</body>
+</html>
